@@ -1,11 +1,9 @@
-(ns tic-tac-toe.rules)
-
-(def turn (atom "X"))
+(ns tic-tac-toe.helpers)
 
 (defn toggle-turn
   "Flip the input between X and O after each turn"
-  []
-  (swap! turn #(if (= % "X") "O" "X")))
+  [current-turn]
+  (if (= current-turn "X") "O" "X"))
 
 (def win-patterns
   [[0 1 2]  ;; rows
@@ -24,6 +22,9 @@
                       "O" "O" "X"
                       "X" "O" "O"])
 
+(defn create-new-board []
+  (vec (repeat 9 nil)))
+
 (defn all-same? [board pattern turn]
   (every? #(= turn (board %)) pattern))
 
@@ -33,5 +34,8 @@
 (defn is-draw? [board]
   (every? #(not (nil? %)) board))
 
+(defn is-empty? [board position]
+  (nil? (board position)))
+
 (defn is-occupied? [board position]
-  (not (nil? (board position))))
+  (not (is-empty? board position)))
